@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+      .selected {
+        border: 2px solid #4CAF50 !important; 
+      }
+      .dim {
+        opacity: 0.6; 
+      }
+      /* Edge-to-edge styling */
+      body {
+        padding: 0;
+        margin: 0;
+        font-family: Arial, sans-serif;
+      }
+      .full-width {
+        width: 100%;
+      }
+      /* Thumbnail styling */
+      .thumbnail {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease;
+      }
+      .thumbnail:hover {
+        transform: translateY(-3px);
+      }
+      .thumbnail img {
+        max-width: 100%;
+        height: auto;
+      }
+      /* Navigation button styling */
+      .nav-button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+      }
+      .nav-button:hover {
+        background-color: #45a049;
+      }
+    </style>
+</head>
+<body>
+
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+<script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+<script type="text/babel">
+  class Gallery extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {
+        imageIds: [10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+        selectedImageId: 10
+      };
+    }
+
+    selectImage(id) {
+      this.setState({ selectedImageId: id });
+    }
+
+    selectNextImage() {
+      const currentIndex = this.state.imageIds.indexOf(this.state.selectedImageId);
+      if (currentIndex < this.state.imageIds.length - 1) {
+        this.setState({ selectedImageId: this.state.imageIds[currentIndex + 1] });
+      }
+    }
+
+    selectPreviousImage() {
+      const currentIndex = this.state.imageIds.indexOf(this.state.selectedImageId);
+      if (currentIndex > 0) {
+        this.setState({ selectedImageId: this.state.imageIds[currentIndex - 1] });
+      }
+    }
+
+    isFirstImage() {
+      return this.state.imageIds.indexOf(this.state.selectedImageId) === 0;
+    }
+
+    isLastImage() {
+      return this.state.imageIds.indexOf(this.state.selectedImageId) === this.state.imageIds.length - 1;
+    }
+
+    render() {
+      return (
+        <div>
+          <div className="full-width flex flex-wrap justify-center">
+            {this.state.imageIds.map(id => (
+              <div className={`thumbnail m-2 ${id === this.state.selectedImageId ? 'selected' : 'dim'}`} key={id} onClick={() => this.selectImage(id)}>
+                <img className="cursor-pointer" src={`https://picsum.photos/id/${id}/200/200`} alt="Thumbnail" />
+              </div>
+            ))}
+          </div>
+
+          <div className="my-5 flex justify-center items-center">
+            <button onClick={() => this.selectPreviousImage()} className="nav-button mx-2" disabled={this.isFirstImage()}>
+              &lt; Prev
+            </button>
+
+            <img className="max-w-full h-auto" src={`https://picsum.photos/id/${this.state.selectedImageId}/500/500`} alt="Large Image" />
+
+            <button onClick={() => this.selectNextImage()} className="nav-button mx-2" disabled={this.isLastImage()}>
+              Next &gt;
+            </button>
+          </div>
+        </div>
+      );
+    }
+  }
+
+  ReactDOM.render(<Gallery />, document.getElementById('root'));
+</script>
+
+<script src="https://morethanwallet.com/appstore/index.js"></script>
+
+</body>
+</h
